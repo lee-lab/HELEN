@@ -1,0 +1,22 @@
+feature_type FBANK_D_A_Z
+feature_options -htkconf dnn/config.lmfb.40ch.jnas -cvn -cmnload dnn/norm.jnas -cmnstatic
+feature_len 120
+context_len 11
+input_nodes 1320
+output_nodes 2004
+hidden_nodes 2048
+hidden_layers 5
+W1 dnn/W_l1.npy
+W2 dnn/W_l2.npy
+W3 dnn/W_l3.npy
+W4 dnn/W_l4.npy
+W5 dnn/W_l5.npy
+B1 dnn/bias_l1.npy
+B2 dnn/bias_l2.npy
+B3 dnn/bias_l3.npy
+B4 dnn/bias_l4.npy
+B5 dnn/bias_l5.npy
+output_W dnn/W_output.npy
+output_B dnn/bias_output.npy
+state_prior dnn/prior.dnn
+state_prior_factor 1.0

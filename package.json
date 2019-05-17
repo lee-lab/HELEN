@@ -1,0 +1,22 @@
+{
+   "name": "dialogue-builder",
+   "main": "./lib/dialogue-builder",
+   "version": "0.0.0",
+   "description": "A short description of your package",
+   "keywords": [
+   ],
+   "activationCommands": {
+      "atom-workspace":[
+         "dialogue-builder:toggle",
+         "dialogue-builder:elasticTab",
+         "dialogue-builder:checkdict"
+      ]
+   },
+   "repository": "https://github.com/atom/dialogue-builder",
+   "license": "MIT",
+   "engines": {
+      "atom": ">=1.0.0 <2.0.0"
+   },
+   "dependencies": {
+   }
+}

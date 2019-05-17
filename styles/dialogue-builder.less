@@ -1,0 +1,62 @@
+// The ui-variables file is provided by base themes provided by Atom.
+//
+// See https://github.com/atom/atom-dark-ui/blob/master/styles/ui-variables.less
+// for a full listing of what's available.
+@import 'ui-variables';
+@import '../node_modules/bootstrap/less/bootstrap';
+
+.dialogue-builder {
+   color: @text-color-highlight;
+   background-color: @app-background-color;
+   font-size: 50;
+   overflow: auto;
+}
+
+.myBox {
+   height: 40%;
+   overflow: auto;
+}
+
+.entireScreen{
+   height:  100%;
+   width: 100%;
+}
+
+.panel-body {
+   padding: 3px
+}
+
+
+atom-text-editor::shadow {
+   .myunderline .region {
+      //カーソル行のアンダーライン
+      border-bottom: 1px solid rgba(250, 150, 0, 1);
+   }
+
+   .line.highlight {
+      background: rgba(255, 0, 0, 0.3);
+   }
+
+   .line.cursor-line {
+      // カーソル行の背景色
+      background: rgba(250, 150, 0, 0.2);
+   }
+}
+
+.tooltip {
+  position: absolute;
+  text-align: center;
+  width: auto;
+  height: auto;
+  padding: 5px;
+  font: 12px;
+  background: white;
+  -webkit-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
+  -moz-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
+  visibility: hidden;
+}
+
+.bar:hover {
+  fill: Brown;
+}
