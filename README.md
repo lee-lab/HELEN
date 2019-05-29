@@ -16,7 +16,7 @@ $ git clone git@github.com:m-masaki72/DialogueBuilder.git
 ```
 本プラグインをAtomエディタのプラグインフォルダ(.atom)にコピーしてください． -->
 
-移動させたらAtomのプラグインを有効化します
+移動させたらAtomを開いてプラグインを有効化します
 （パッケージは，Atomのウィンドウをリロードすることで有効化可能）
 ※メニューからPackages→Command Palette→Toggleでコマンドラインを使って
 Winodow:Reloadを実行でリロードできます．
@@ -25,8 +25,11 @@ Winodow:Reloadを実行でリロードできます．
 ## Demo
 
 ## Usage
+HELENを使用する際はMMDAgentのコンテンツディレクトリ（.mdfファイルや.fstファイルがあるディレクトリ，MMDAgent公式ホームページ
+からサンプルコンテンツをダウンロードすることも可能です）をAtomで開き，.fstファイルを開きながら操作してください．
+
 - Draw Graph (*Ctrl + Alt + shift + g* )  
-グラフ描画タブを開きます．  `MAKE_GRAPH`ボタンを押すことで描画を更新します．「BIG」「SMALL」ボタンでグラフの拡大・縮小ができます．
+グラフ描画タブを開きます．  `MAKE_GRAPH`ボタンを押すことで描画を更新します．「BIG」「SMALL」ボタンでグラフの拡大・縮小ができます．  
 ![Draw Graph](./manual/5.png)
 
 - Insert TAB(*Ctrl + Alt + shift + t* )  
@@ -34,20 +37,21 @@ Winodow:Reloadを実行でリロードできます．
 ![Insert Tab](./manual/2.png)
 
 - checkDictionary(*Ctrl + Alt + shift + d* )  
-内蔵辞書と比較して未知語を強調表示します．
+内蔵辞書と比較して未知語を強調表示します．  
 ![check Dictionary](./manual/10.png)
 
 - Send Command Message to MMDAgent  
-`tools/mmdagent_exe/MMDAgent.exe`で起動するMMDAgentに対してコマンドを送ります．リアルタイムデバッグの手助けになります．
+`tools/mmdagent_exe/MMDAgent.exe`で起動するMMDAgentに対してコマンドを送ります．リアルタイムデバッグの手助けになります．  
+MMDAgentを起動する際は，コンテンツディレクトリ上にある.mdfファイルを`tools/mmdagent_exe/MMDAgent.exe`にドラッグ＆ドロップします．  
 ![Send Command](./manual/5.png)
 
 - Follow Line when MMDAgent is working  
-チェックマークをONにすることでフォローモードを起動します．`tools/mmdagent_exe/MMDAgent.exe`で起動するMMDAgentに対してエディタ上において現在状態を強調表示するようになります．
-![Follow mode](./manual/6.png)
-![Follow mode2](./manual/7.png)
+チェックマークをONにすることでフォローモードを起動します．`tools/mmdagent_exe/MMDAgent.exe`で起動するMMDAgentに対してエディタ上において現在状態を強調表示するようになります．  
+![Follow mode](./manual/6.png)  
+![Follow mode2](./manual/7.png)  
 
 ## リアルタイムデバッグ表示  
-![Debug](./manual/8.png)
+![Debug](./manual/8.png)  
 `tools/mmdagent_exe/MMDAgent.exe`を起動するとリアルタイムデバッグ表示を行います．
 図のように現在実行中の状態をグラフで色付けしながら動作させることが可能です．
 一定時間起動し続けると不具合が発生することがあります．その際はエディタとMMDAgentをリロード(*shift + r* )してください．
