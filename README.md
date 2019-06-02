@@ -1,94 +1,113 @@
 # HELEN-Dialogue-Interaction-Editor-for-MMDAgent-
-MMDAgentのfstファイル編集のためのAtomエディタ用拡張パッケージです
+HELENとはMMDAgentのfstファイル編集のためのAtomエディタ用拡張パッケージです．音声対話構築のための統合エディタを目指しています．  
+[MMDAgent公式サイト](http://www.mmdagent.jp/)  
+[fstファイルとは？](https://qiita.com/m-masaki72/items/8695e7d13607007257c5)  
+[Atom公式サイト](https://atom.io/docs)  
 
-## Description
-fstファイル構築のための，記述補助，デバッグ補助，可視化の機能をまとめたものです．
-音声対話構築のための統合エディタを目指しています．
+## 主な特徴
+HELENでは主に以下の3つの機能を利用することができます．  
+- fstファイル編集の補助機能  
+- MMDAgentのリアルタイムデバッグ  
+- 動作ログによるフィードバック  
 
-## Install
-HELENを使用する前にテキストエディタ「Atom」をインストールしてください．
-インストールできたらHELENディレクトリを~/.atom/packages以下に移します．
-（Windowsの場合はC:\Users\\***\\.atom\packages以下）
+## 準備
+HELENを利用するために必要な環境
+- [Atom](https://atom.io/)・・・Version1.37.0以降  
+- Windows10以降・・・リアルタイムデバッグ時に必要  
+- マイク・・・MMDAgentの利用に必要です  
 
-<!-- ```
-$ cd ~/.atom/packages
-$ git clone git@github.com:m-masaki72/DialogueBuilder.git
-```
-本プラグインをAtomエディタのプラグインフォルダ(.atom)にコピーしてください． -->
+※Atomが動作する環境であればリアルタイムデバッグ以外の機能を利用することが可能です．
 
-移動させたらAtomを開いてプラグインを有効化します
-（パッケージは，Atomのウィンドウをリロードすることで有効化可能）
-※メニューからPackages→Command Palette→Toggleでコマンドラインを使って
-Winodow:Reloadを実行でリロードできます．
-インストールできたかどうかは，Packages→Settings View→Openで設定を開き，Packages→Community Packagesで確認できます．
+### インストール手順
+1. HELENをダウンロードして解凍します
+2. 解凍してできたディレクトリをAtomのpackagesディレクトリ以下に移します．デフォルトはC:\User\\***\\.atom\packages以下です
+3. Atomを開きます
+4. AtomのPackages→Settings View→Openで設定を開きます
+5. Packages→Community PackagesでHELENが表示されることを確認します
+6. fstファイルをAtomで開いて準備完了です
 
-## Demo
+<!-- ## Demo -->
 
-## Usage
-HELENを使用する際はMMDAgentのコンテンツディレクトリ（.mdfファイルや.fstファイルがあるディレクトリ，MMDAgent公式ホームページ
-からサンプルコンテンツをダウンロードすることも可能です）をAtomで開き，.fstファイルを開きながら操作してください．
+## エディタ編集時の補助機能
+---
+以下に説明する機能は，Atomでfstファイルを開いた状態にすることで利用できます．
 
+### 機能一覧
 - Draw Graph (*Ctrl + Alt + shift + g* )  
-グラフ描画タブを開きます．  `MAKE_GRAPH`ボタンを押すことで描画を更新します．「BIG」「SMALL」ボタンでグラフの拡大・縮小ができます．  
-![Draw Graph](./manual/5.png)
+最初にグラフ描画タブを開きます．  `MAKE_GRAPH`ボタンを押すことで描画を更新します．「BIG」「SMALL」ボタンでグラフの拡大・縮小ができます．  
+![Draw Graph](./manual/5.png)  
 
 - Insert TAB(*Ctrl + Alt + shift + t* )  
-自動でFSTを清書します．  
+FSTを編集し終わったらこのコマンドを入力します．自動でFSTが清書されます．  
 ![Insert Tab](./manual/2.png)
 
 - checkDictionary(*Ctrl + Alt + shift + d* )  
-内蔵辞書と比較して未知語を強調表示します．  
+新しく認識する単語を追加したら，このコマンドを実行しましょう．内蔵辞書と比較して未知語を強調表示します．  
+強調された単語は[単語辞書に追加](https://mmdagent.wordpress.com/2013/01/18/adding-recognition-words/)するようにしましょう．  
 ![check Dictionary](./manual/10.png)
 
-- Send Command Message to MMDAgent  
-`tools/mmdagent_exe/MMDAgent.exe`で起動するMMDAgentに対してコマンドを送ります．リアルタイムデバッグの手助けになります．  
-MMDAgentを起動する際は，コンテンツディレクトリ上にある.mdfファイルを`tools/mmdagent_exe/MMDAgent.exe`にドラッグ＆ドロップします．  
-![Send Command](./manual/5.png)
-
-- Follow Line when MMDAgent is working  
-チェックマークをONにすることでフォローモードを起動します．`tools/mmdagent_exe/MMDAgent.exe`で起動するMMDAgentに対してエディタ上において現在状態を強調表示するようになります．  
-![Follow mode](./manual/6.png)  
-![Follow mode2](./manual/7.png)  
-
 ## リアルタイムデバッグ表示  
+---
+この機能を利用するためには，以下の動作が必要になります．
+
+### リアルタイムデバッグの準備
+1. MMDAgentのコンテンツを作成します．
+2. 手順1で作成したコンテンツのディレクトリ内にあるmdfファイルをドラッグします
+3. 手順2でドラッグしたmdfファイルを，ダウンロードしたディレクトリ内にある`tools/mmdagent_exe/MMDAgent.exe`にドロップします
+4. MMDAgentが起動します
+5. 手順1～4までの動作を行ったときと同じpcでAtomを起動します
+6. Atom上で作成したコンテンツのfstファイルを開きます
+7.  (*Ctrl + Alt + shift + g* ) を入力してグラフ描画タブを開くと準備完了です
+
+### 注意事項
+- MMDAgentのコンテンツ作成については[こちら](https://mmdagent.lee-lab.org/?p=460&lang=ja)．[公式サイト](http://www.mmdagent.jp/)からサンプルコンテンツをダウンロードすることも可能です．
+- 現在この機能は`Windowsでのみ利用可能`です．
+- 手順3で使用するファイルは，MMDAgent公式サイトで公開されている`MMDAgent.exe`ファイルではなく，HELENに同梱されている専用の
+`MMDAgent.exe`ファイルが必要です．
+- 一定時間起動し続けると不具合が発生することがあります．その際はエディタとMMDAgentをリロード(*shift + r* )してください．
+
+### 機能一覧
+- Follow Line when MMDAgent is working  
+MMDAgentを起動したら，最初にチェックマークをONにすることでフォローモードを起動しましょう．  
+上手く機能しない場合はもう一度MAKE_GRAPHボタンをクリックしてグラフを更新してください．  
+起動中のMMDAgentに対してエディタ上で現在状態を強調表示するようになります．  
+![Follow mode](./manual/6.png)   
+以下の赤い四角で囲まれた箇所のように，現在状態がオレンジで表示されます
 ![Debug](./manual/8.png)  
-`tools/mmdagent_exe/MMDAgent.exe`を起動するとリアルタイムデバッグ表示を行います．
-図のように現在実行中の状態をグラフで色付けしながら動作させることが可能です．
-一定時間起動し続けると不具合が発生することがあります．その際はエディタとMMDAgentをリロード(*shift + r* )してください．
 
+- Send Command Message to MMDAgent  
+以下の赤い四角で囲まれた部分にMMDAgentのコマンドを入力してみましょう．  
+入力ができたら右の「SEND_MESSAGE」をクリックしてください．起動中のMMDAgentに対してコマンドが送信されます．  
+![Send Command](./manual/4.png)
 
-## ログサーバとプロファイル生成手順
-#### サーバの場所と実行
-デフォルトポート8080，host0.0.0.0を開く．
-```
-cd ./tools/log_server
-python flask_server.py
-```
-ポートにくるログ・ファイルを収集，MMDAgent側で指定されたフォルダ形式で保存していく．
+## 動作ログによるフィードバック
+---
+HELENでは，MMDAgentの動作ログを用いることでより効率的なFST編集を行うことが可能です．  
+ログ収集にはPocket MMDAgentの機能を使用することで収集できます．  
+ログの作成方法やサーバの仕様など詳細は[こちら](https://mmdagent.lee-lab.org/?p=576&lang=ja)をご覧ください．
 
-#### ログからプロファイルの生成
-<!-- ```
-cd ./tools/log_server
-python make_profile.py -path_of_the_log_file_Dircroty-
-``` 
+### 準備
+1. MMDAgentのコンテンツを作成します．  
+2. [Pocket MMDAgent](https://mmdagent.lee-lab.org/?p=576&lang=ja)の機能を使用してMMDAgentのログファイルを作成します
+3. HELENを解凍してできたディレクトリ内にある`tools/log_server/make_profile.py`を手順2で作成されたログファイルがあるディレクトリと同じ場所にコピーします
+4. 手順3でコピーした先のディレクトリに移動し，make_profile.pyを実行します
+5. 生成されるプロファイル`「MMDAgent.profile」`を作成したコンテンツのfstファイルがある場所と同じディレクトリに移します
+6. `MMDAgent.profile`の「MMDAgent」の部分を「\*\*\*.fst」の\*\*\*と同じ名前にします
+7. 準備完了です
 
+### 注意事項
+- pythonのバージョンは3.7.3で確認しています
+- ログファイルはPocket MMDAgentの`MMDAgent.exe`でのみ作成されます．HELENに同梱されている`MMDAgent.exe`ではログファイルの生成・アップロード機能
+は現在使用できません．
 
-指定したパスと同じディレクトリにあるログファイルを生成してプロファイルを生成．
-（同階層のログ・ファイルのみ，ディレクトリを掘ったりはしない）
--->
+### 機能一覧
+手順1～7までの処理の後，HELENのビューアを更新すると以下のような強調表示が可能となります
+![Profile show](./manual/userage.png)  
+また，グラフ上の各状態をクリックするとその状態での利用状況を表示させることができます  
+認識単語はその状態で認識された単語が表示されます  
+![Profile data](./manual/11.png)
 
-tools/log_server内にあるmake_profile.pyファイルをログファイルがあるディレクトリと同じディレクトリにコピーします．（ログファイルはPocket MMDAgent及びMMDAgent-exのLOGコマンドで生成されるログファイルです）
-
-でてきた`MMDAgent.profile`をHELENで開いているFSTファイルにコピー，名前を統一します．
-```
-cp MMDAgent.profile -Path_to_FST_File-
-mv MMDAgent.profile xxx.profile #xxx is same name of .fst file
-```
-
-以上の処理の後，HELENのビューアを更新すると以下のような強調表示が可能となります．
-![Profile show](./manual/userage.png)
-
-## プロファイル表示の判例
+## プロファイル表示の凡例
 ![Profile show ex](./manual/判例.png)
 
 
@@ -96,4 +115,4 @@ mv MMDAgent.profile xxx.profile #xxx is same name of .fst file
 MIT
 
 ## Author
-[Masaki Mori(Nagoya Institie of Technology)](https://github.com/m-masaki72)
+[Akinobu Lee](https://www.slp.nitech.ac.jp/)，[Masaki Mori(Nagoya Institie of Technology)](https://github.com/m-masaki72)，[Yuuki Yabusaki](https://www.slp.nitech.ac.jp/~yabusan16/)

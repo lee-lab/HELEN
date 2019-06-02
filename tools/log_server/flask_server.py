@@ -23,4 +23,3 @@ def hello():
 if __name__ == "__main__":
     #if you set host="0.0.0.0", this server open local network
     app.run(debug=True, host="0.0.0.0", port=8080, ssl_context=context)
-    #app.run(debug=True, host="0.0.0.0", port=8080)
