@@ -1,22 +1,29 @@
-# HELEN-Dialogue-Interaction-Editor-for-MMDAgent-
-HELENとはMMDAgentのfstファイル編集のためのAtomエディタ用拡張パッケージです．音声対話構築のための統合エディタを目指しています．  
+# HELEN - Dialogue Interaction Editor for MMDAgent -
+
+## HELEN とは
+
+HELEN は、MMDAgentの対話シナリオファイル（fstファイル）を編集するための Atom エディタ用拡張パッケージです．
+
 [MMDAgent公式サイト](http://www.mmdagent.jp/)  
 [fstファイルとは？](https://qiita.com/m-masaki72/items/8695e7d13607007257c5)  
 [Atom公式サイト](https://atom.io/docs)  
 
-## 主な特徴
 HELENでは主に以下の3つの機能を利用することができます．  
-- fstファイル編集の補助機能  
-- MMDAgentのリアルタイムデバッグ  
-- 動作ログによるフィードバック  
+- fstファイル編集の補助（対話フローのグラフ表示、認識辞書の自動チェック等）
+- MMDAgent のリアルタイムデバッグ（状態遷移をリアルタイム可視化、任意メッセージの送信）
+- 動作ログによるフィードバック（MMDAgent の動作ログ → 解析 → 対話シナリオにフィードバック表示）
 
 ## 準備
-HELENを利用するために必要な環境
+
+### 動作環境
+
+HELENを利用するために必要な環境は以下の通りです。
 - [Atom](https://atom.io/)・・・Version1.37.0以降  
 - Windows10以降・・・リアルタイムデバッグ時に必要  
 - マイク・・・MMDAgentの利用に必要です  
 
-※Atomが動作する環境であればリアルタイムデバッグ以外の機能を利用することが可能です．
+※リアルタイムデバッグは拡張された専用のMMDAgent（同梱）を使うため、現在は Windows10 のみサポートしています。  
+※Windows以外の環境でもAtomが動作する環境であればリアルタイムデバッグ以外の機能は利用可能です．
 
 ### インストール手順
 1. HELENをダウンロードして解凍します
@@ -28,25 +35,27 @@ HELENを利用するために必要な環境
 
 <!-- ## Demo -->
 
-## エディタ編集時の補助機能
----
-以下に説明する機能は，Atomでfstファイルを開いた状態にすることで利用できます．
+## 機能１：fstファイル編集の補助
 
-### 機能一覧
-- Draw Graph (*Ctrl + Alt + shift + g* )  
+Atomでfstファイルを開いたとき、以下の機能が利用できます．
+
+- **Draw Graph**: `Ctrl + Alt + shift + g`
+
 最初にグラフ描画タブを開きます．  `MAKE_GRAPH`ボタンを押すことで描画を更新します．「BIG」「SMALL」ボタンでグラフの拡大・縮小ができます．  
 ![Draw Graph](./manual/5.png)  
 
-- Insert TAB(*Ctrl + Alt + shift + t* )  
+- **Insert TAB**: `Ctrl + Alt + shift + t`
+
 FSTを編集し終わったらこのコマンドを入力します．自動でFSTが清書されます．  
 ![Insert Tab](./manual/2.png)
 
-- checkDictionary(*Ctrl + Alt + shift + d* )  
+- **checkDictionary**: `*Ctrl + Alt + shift + d*`
+
 新しく認識する単語を追加したら，このコマンドを実行しましょう．内蔵辞書と比較して未知語を強調表示します．  
 強調された単語は[単語辞書に追加](https://mmdagent.wordpress.com/2013/01/18/adding-recognition-words/)するようにしましょう．  
 ![check Dictionary](./manual/10.png)
 
-## リアルタイムデバッグ表示  
+## 機能２：MMDAgent のリアルタイムデバッグ 
 ---
 この機能を利用するためには，以下の動作が必要になります．
 
@@ -66,30 +75,39 @@ FSTを編集し終わったらこのコマンドを入力します．自動でFS
 `MMDAgent.exe`ファイルが必要です．
 - 一定時間起動し続けると不具合が発生することがあります．その際はエディタとMMDAgentをリロード(*shift + r* )してください．
 
-### 機能一覧
-- Follow Line when MMDAgent is working  
-MMDAgentを起動したら，最初にチェックマークをONにすることでフォローモードを起動しましょう．  
-上手く機能しない場合はもう一度MAKE_GRAPHボタンをクリックしてグラフを更新してください．  
-起動中のMMDAgentに対してエディタ上で現在状態を強調表示するようになります．  
+### 状態遷移のリアルタイム可視化
+
+MMDAgentを起動したら，最初に下記の `text Following` のチェックマークをONにすることでフォローモードを起動できます．  
+（上手く機能しない場合はもう一度MAKE_GRAPHボタンをクリックしてグラフを更新してください．）  
+起動中のMMDAgentの対話シナリオの現在状態番号が随時読み取られ、対応するエディタ上のfstの状態が強調表示されます。
 ![Follow mode](./manual/6.png)   
-以下の赤い四角で囲まれた箇所のように，現在状態がオレンジで表示されます
+
+現在状態はグラフ上でオレンジ色で表示されます。現在状態はMMDAgentの動作をリアルタイムに反映して移動していきます（下図の赤枠）。
+チェックマークをOFFにすると動作を停止します。
 ![Debug](./manual/8.png)  
 
-- Send Command Message to MMDAgent  
-以下の赤い四角で囲まれた部分にMMDAgentのコマンドを入力してみましょう．  
-入力ができたら右の「SEND_MESSAGE」をクリックしてください．起動中のMMDAgentに対してコマンドが送信されます．  
+### 任意メッセージの送信
+
+以下の赤い四角で囲まれた部分にMMDAgentのコマンドを入力して右の「SEND_MESSAGE」をクリックすることで、起動中のMMDAgentに対して任意メッセージの送信が行えます。
 ![Send Command](./manual/4.png)
 
-## 動作ログによるフィードバック
----
-HELENでは，MMDAgentの動作ログを用いることでより効率的なFST編集を行うことが可能です．  
-ログ収集にはPocket MMDAgentの機能を使用することで収集できます．  
+## 機能３：動作ログによるフィードバック
+
+HELENでは，MMDAgentの動作ログから抽出した状態滞在時間等の情報を重ねて表示することができます。
+これにより、実際の利用状況をフィードバックしながらFSTを編集することができます。
+
+本機能は下記の学会で発表する予定の機能です：
+
+> 森 雅希、李 晃伸．「[音声対話コンテンツ循環環境を実現するための対話シナリオのプロファイル自動収集およびフィードバック](https://confit.atlas.jp/guide/event/jsai2019/subject/3L4-OS-22b-01/tables?cryptoId=)」
+> 
+
+動作ログは MMDAgent の標準出力を保存する方法のほか、[Pocket MMDAgent](https://mmdagent.lee-lab.org/) を用いてサーバ経由で取得することも可能です。
 ログの作成方法やサーバの仕様など詳細は[こちら](https://mmdagent.lee-lab.org/?p=576&lang=ja)をご覧ください．
 
 ### 準備
 1. MMDAgentのコンテンツを作成します．  
-2. [Pocket MMDAgent](https://mmdagent.lee-lab.org/?p=576&lang=ja)の機能を使用してMMDAgentのログファイルを作成します
-3. HELENを解凍してできたディレクトリ内にある`tools/log_server/make_profile.py`を手順2で作成されたログファイルがあるディレクトリと同じ場所にコピーします
+2. [Pocket MMDAgent](https://mmdagent.lee-lab.org/?p=576&lang=ja)の機能を用いる等して、MMDAgentの動作ログファイルを作成します
+3. HELENを解凍してできたディレクトリ内にある`tools/log_server/make_profile.py`を手順2で作成された動作ログファイルがあるディレクトリと同じ場所にコピーします
 4. 手順3でコピーした先のディレクトリに移動し，make_profile.pyを実行します
 5. 生成されるプロファイル`「MMDAgent.profile」`を作成したコンテンツのfstファイルがある場所と同じディレクトリに移します
 6. `MMDAgent.profile`の「MMDAgent」の部分を「\*\*\*.fst」の\*\*\*と同じ名前にします
@@ -115,4 +133,4 @@ HELENでは，MMDAgentの動作ログを用いることでより効率的なFST�
 MIT
 
 ## Author
-[Akinobu Lee](https://www.slp.nitech.ac.jp/)，[Masaki Mori(Nagoya Institie of Technology)](https://github.com/m-masaki72)，[Yuuki Yabusaki](https://www.slp.nitech.ac.jp/~yabusan16/)
+[Akinobu Lee](https://www.slp.nitech.ac.jp/)，[Masaki Mori](https://github.com/m-masaki72)，[Yuuki Yabusaki](https://www.slp.nitech.ac.jp/~yabusan16/) at Nagoya Institie of Technology, Japan.
