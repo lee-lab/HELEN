@@ -55,7 +55,7 @@ class DialogueBuilderView extends ScrollView
                               @div class:'tab-pane active', id:'1', =>
                                  @form class: "form-horizontal", =>
                                     @div class: "form-group" ,=>
-                                       @textarea class: 'form-control native-key-bindings', id:'useage', rows:'5', col:"40",=>
+                                       @textarea class: 'form-control native-key-bindings', id:'usage', rows:'5', col:"40",=>
                                           @text '利用率を表示'
                               @div class:'tab-pane', id:'2', =>
                                  @form class: "form-horizontal", =>
@@ -129,27 +129,29 @@ class DialogueBuilderView extends ScrollView
    drawFST: (event, element) ->
       console.log "Preparing #{element.name} for lanch!"
       @redraw()
-      console.log "load profile"
+      console.log "loading profile"
 
       
       editor = atom.workspace.getActivePaneItem()
       profPath = editor.editor.buffer.file.path
       profPath = profPath.substr(0, profPath.length - 3) + 'profile'
-      profFile = fs.readFileSync(profPath, 'utf8')
-      for term in profFile.split('--')
-         stateNum = 0
-         for line in term.split(/\r\n|\r|\n/)
-            result = line.match(/StateNum: (\d+)/)
-            if result?
-               stateNum = result[1]
-               myprof_recogWord[String(stateNum)] = ""
-            else if line.indexOf("UseCount") != -1
-               s = line.split(" ")
-               myprof_Detail[String(stateNum)] = "利用率: " + s[1] + "\n離脱率: " + s[4] + "\n平均滞在時間: " + s[7]
-               changeStateColor(String(stateNum), parseInt(parseFloat(s[1]) * 12))
-            else
-               myprof_recogWord[String(stateNum)] += line + "\n"
-      
+      try
+         profFile = fs.readFileSync(profPath, 'utf8')
+         for term in profFile.split('--')
+            stateNum = 0
+            for line in term.split(/\r\n|\r|\n/)
+               result = line.match(/StateNum: (\d+)/)
+               if result?
+                  stateNum = result[1]
+                  myprof_recogWord[String(stateNum)] = ""
+               else if line.indexOf("UseCount") != -1
+                  s = line.split(" ")
+                  myprof_Detail[String(stateNum)] = "利用率: " + s[1] + "\n離脱率: " + s[4] + "\n平均滞在時間: " + s[7]
+                  changeStateColor(String(stateNum), parseInt(parseFloat(s[1]) * 12))
+               else
+                  myprof_recogWord[String(stateNum)] += line + "\n"
+      catch err
+         console.log "profile file not found"
 
    # エディターIDからエディタを取得し、取得できたらビューを描画する
    resolveEditor: (editorId) ->
@@ -234,12 +236,12 @@ class DialogueBuilderView extends ScrollView
          else if myprof_recogWord[this.id.substr(1)] == ""
             d3.select('#recog').text("認識語なし")
          else
-            d3.select('#useage').text("データがありません")
+            d3.select('#usage').text("データがありません")
 
          if myprof_Detail[this.id.substr(1)]?
-            d3.select('#useage').text(myprof_Detail[this.id.substr(1)])
+            d3.select('#usage').text(myprof_Detail[this.id.substr(1)])
          else
-            d3.select('#useage').text("データがありません")
+            d3.select('#usage').text("データがありません")
 
          #テキストエディタから状態をテキストを取得
          #先頭の番号とクリックしたノードのIDを比較し，状態番号に飛ぶ．
@@ -271,52 +273,53 @@ class DialogueBuilderView extends ScrollView
    fst2svg =  (fsttext) ->
 
       strArray = fsttext.split(/\r\n|\r|\n/)
-      ans = ''
       i = 0
       clasterNum = 0
       Start_state = 0
       End_state = 0
+      tooltip = ""
+      node = []
+      edge = []
       for i in [0..strArray.length-1] #i+1が行番号になる
-
          targetLine = strArray[i].replace(/(^\s+)|(\s+$)/g, '')
-
          if targetLine == '' || targetLine == '\n' #空白行は無視
             continue
          else if targetLine.match(/^#/) #コメント行処理
-            temp = targetLine.match(/#+ *(\d+) *- *(\d+)/g)
-            if temp?
-               num = targetLine.match(/\d+/)
-               clasterNum += 1
-               Start_state = Number(num[0])
-               End_state = Number(num[1])
-               ans += """
-               subgraph cluster#{clasterNum} {
-               color = "white";
-               fillcolor = "#343434";
-               label = \"#{targetLine}\";
-               }
-               """
+#            temp = targetLine.match(/#+ *(\d+) *- *(\d+)/g)
+#            if temp?
+#               num = targetLine.match(/\d+/)
+#               clasterNum += 1
+#               Start_state = Number(num[0])
+#               End_state = Number(num[1])
          else  #それ以外の行
-            t = targetLine.split(/\s+/) #空白でsplit
-            if t.length == 4  #引数4つ
-               #edge生成,
-               ans += "#{t[0]}->#{t[1]} [id = \"#{t[2]}/#{t[3]}\"];\n"
-               #ID情報埋め込み
-               ans += "#{t[0]}[id = \"n#{t[0]}\"];\n"
-               ans += "#{t[1]}[id = \"n#{t[1]}\"];\n"
-               #subcluster設定
-               if Start_state <= Number(t[0]) && Number(t[0]) <= End_state
-                  ans += """
-                  subgraph cluster#{clasterNum} {
-                  #{t[0]};
-                  }
-                  """
-               if Start_state <= Number(t[1]) && Number(t[1]) <= End_state
-                  ans += """
-                  subgraph cluster#{clasterNum} {
-                  #{t[1]};
-                  }
-                  """
+            t = []
+            regstr = /[^\s"]+|"([^"]*)"/gi
+            match = regstr.exec(targetLine)
+            while match
+               if match?
+                  if match[1]?
+                     t.push(match[1])
+                  else
+                     t.push(match[0])
+               match = regstr.exec(targetLine)
+            if t.length >= 4
+               idx = "#{t[0]}->#{t[1]}"
+               if t.length >= 5  #引数5つ以上
+                  tooltip = "\n#{t[0]} #{t[1]}  #{t[2]}  #{t[3]} : #{t[4]}"
+               else
+                  tooltip = "\n#{t[0]} #{t[1]}  #{t[2]}  #{t[3]}"
+               if edge[idx]?
+                  edge[idx] += tooltip
+               else
+                  edge[idx] = tooltip
+               if node[t[0]]?
+                  node[t[0]] += tooltip
+               else
+                  node[t[0]] = tooltip
+#               if Start_state <= Number(t[0]) && Number(t[0]) <= End_state
+#                  cluster[clasterNum] += "#{t[0]};\n"
+#               if Start_state <= Number(t[1]) && Number(t[1]) <= End_state
+#                  cluster[clasterNum] += "#{t[1]};\n"
             else  #コンパイルエラー
                console.log 'error'+ ':'+ ' line:' + i + ':' + targetLine
                #textArea = document.getElementById ('console')
@@ -325,9 +328,8 @@ class DialogueBuilderView extends ScrollView
       GraphFormat =
          'graph [
          bgcolor = "#343434",
-         concentrate = true,
          constraint = true,
-         fontcolor	="white",
+         fontcolor ="white",
          fontsize = 14,
          style = "filled",
          rankdir = LR
@@ -353,8 +355,22 @@ class DialogueBuilderView extends ScrollView
          color = 7,
          fillcolor = 11,
          ];'
+
+      ans = ""
+      for key, value of node
+         ans += "#{key} [id = \"n#{key}\", tooltip = \"#{value}\"];\n"
+      for key, value of edge
+         ans += "#{key} [id = \"#{key}\", tooltip = \"#{value}\"];\n"
+#      for key, value of cluster
+#         ans += """
+#         subgraph cluster#{key} {
+#         color = "white";
+#         fillcolor = "#343434";
+#         label = \"#{targetLine}\";
+#         #{value}
+#         }
+#         """
       FormatText = "digraph G {\n#{GraphFormat}\n#{NodeFormat}\n#{EdgeFormat}\n#{ans}\n}"
-      #fs.writeFile 'C:/Users/masaki/.atom/packages/dialogue-builder/test.txt', FormatText, 'utf-8', (err)->
       console.log FormatText
       ret = Viz(FormatText,
          engine: "dot"
