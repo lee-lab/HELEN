@@ -18,7 +18,7 @@ HELENでは主に以下の3つの機能を利用することができます．
 ### 動作環境
 
 HELENを利用するために必要な環境は以下の通りです。
-- [Atom](https://atom.io/)・・・Version1.37.0以降  
+- [Atom](https://atom.io/)・・・Version1.37.0以降をあらかじめインストールしてください
 - Windows10以降・・・リアルタイムデバッグ時に必要  
 - マイク・・・MMDAgentの利用に必要です  
 
@@ -26,37 +26,55 @@ HELENを利用するために必要な環境は以下の通りです。
 ※Windows以外の環境でもAtomが動作する環境であればリアルタイムデバッグ以外の機能は利用可能です．
 
 ### インストール手順
-1. HELENをダウンロードして解凍します
-2. 解凍してできたディレクトリをAtomのpackagesディレクトリ以下に移します．デフォルトはC:\User\\***\\.atom\packages以下です
-3. Atomを開きます
-4. AtomのPackages→Settings View→Openで設定を開きます
-5. Packages→Community PackagesでHELENが表示されることを確認します
-6. fstファイルをAtomで開いて準備完了です
+1. HELENをダウンロードして（約270MB） Atomのpackagesディレクトリ以下に展開します．デフォルトはWindowsでは C:\Users\***\.atom\packages以下です。zip をダウンロード・展開するか、直接 git clone してください。
+3. Atomを起動します
+4. Atomの Packages メニュー内に "HELEN" が表示されていることを確認します
+5. 準備完了です
 
 <!-- ## Demo -->
 
-## 機能１：fstファイル編集の補助
+## HELEN用ウィンドウを開く
 
-Atomでfstファイルを開いたとき、以下の機能が利用できます．
+Atomで fstファイルを開いた状態で以下の操作のどちらかを行うことで、その fst に対するHELEN用ウィンドウを右ペーンに開けます。。
 
-- **Draw Graph**: `Ctrl + Alt + shift + g`
+- メニューの Packages → HELEN → Open HELEN Window 
+- `Ctrl + Alt + shift + g`
 
-最初にグラフ描画タブを開きます．  `MAKE_GRAPH`ボタンを押すことで描画を更新します．「BIG」「SMALL」ボタンでグラフの拡大・縮小ができます．  
+HELEN用ウィンドウは（"1 DialogueBuilder") のような名前になっています。複数の fst を編集する場合、カレントの切り替えでは自動的に切り替わりませんので、fstのバッファごとに個別にHELEN用ウィンドウを作成してください。
+
 ![Draw Graph](./manual/5.png)  
 
-- **Insert TAB**: `Ctrl + Alt + shift + t`
+## 機能１：fstファイルの編集補助
 
-FSTを編集し終わったらこのコマンドを入力します．自動でFSTが清書されます．  
+### グラフ描画
+
+FSTをグラフィカルに表示するには、HELEN用ウィンドウの `MAKE_GRAPH`ボタンを押します。
+
+- 状態あるいは遷移の上にカーソルを置くと内容がポップアップ表示されます
+- 同一状態間に複数の遷移がある場合は１つにまとめて表示されます。
+- 状態をクリックすると、対応する fst の行へジャンプできます。 
+- fst ファイルを変更した場合、保存時にグラフが自動更新されます
+- グラフが大きい場合は「BIG」「SMALL」ボタンで拡大・縮小できます． 
+
+![Draw Graph](./manual/5.png)  
+
+
+### フィールドの桁揃え
+
+fst のバッファ上で **Insert TAB**: `Ctrl + Alt + shift + t` を実行することで、fstのフィールドごとに自動的桁揃えが行えます。
+
 ![Insert Tab](./manual/2.png)
 
-- **checkDictionary**: `*Ctrl + Alt + shift + d*`
+### 認識辞書のチェック
 
-新しく認識する単語を追加したら，このコマンドを実行しましょう．内蔵辞書と比較して未知語を強調表示します．  
+**checkDictionary**: `*Ctrl + Alt + shift + d*` は音声認識辞書の自動チェックです。 fst 中で音声認識結果として捉える単語 (`RECOG_EVENT_STOP` の引数) の各引数について、内蔵の音声認識用辞書をチェックし、辞書にない未知語を強調表示します． 
 強調された単語は[単語辞書に追加](https://mmdagent.wordpress.com/2013/01/18/adding-recognition-words/)するようにしましょう．  
+
 ![check Dictionary](./manual/10.png)
 
+
 ## 機能２：MMDAgent のリアルタイムデバッグ 
----
+
 この機能を利用するためには，以下の動作が必要になります．
 
 ### リアルタイムデバッグの準備
